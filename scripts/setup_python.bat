@@ -4,10 +4,10 @@
 :: Version 1.0, 29.08.2024
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-set GIT_VERSION=2.46.0
+set GIT_VERSION=2.47.1
 set PY_VERSION=3.12.5
 set PY_SHORT=312
-set DENO_VERSION=v1.46.3
+set DENO_VERSION=v2.1.4
 
 set SCRIPTDIR=%~dp0
 :: Save current directory
@@ -24,19 +24,24 @@ set PATH=%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMRO
 
 call :FindProgram git.exe :InstallGit GIT_PATH
 call :FindProgram code.exe :InstallCode CODE_PATH
-call :FindProgram deno.exe :InstallDeno DENO_PATH
-call :InstallPython 
+:: call :FindProgram deno.exe :InstallDeno DENO_PATH
+:: call :InstallPython 
 
 %comspec% /K title %PARENT%
 
 :: FINISH Goto End-Of-File
 GOTO :eof
 
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Unterprogramm zur Ausgabe
+:EchoRed
+powershell.exe write-host -foregroundcolor Red %1 %2 %3
+goto:eof
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Unterprogramm zur Programmsuche
 :FindProgram
-echo Arg %1 %2 %3
+echo FindProgram Arg %1 %2 %3
 
 set "PROGRAM_NAME=%1"
 set "INSTALL_CALL=%2"
@@ -60,8 +65,41 @@ if defined PROGRAM_PATH (
     echo %PROGRAM_NAME% wurde nicht im Pfad gefunden.
     call %INSTALL_CALL%
 )
+echo End of FindProgram Arg %1 %2 %3
 exit /b
-:: ENDE Unterprogramm zur Programmsuche
+:: ENDE 
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Unterprogramm zum Download
+:Download
+echo Download Arg %1 %2 %3
+set "SRC=%1"
+set "TGT=%2"
+
+if exist %TGT% (
+    echo Download Target %TGT% exists
+) else (
+    powershell -command "Invoke-WebRequest -Uri "\"%SRC%\"" -OutFile '%TGT%'"
+)
+call :EchoRed Download %TGT% finished
+exit /b
+:: ENDE
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Unterprogramm zum Extrahieren
+:Extract
+echo Extract Arg %1 %2 %3
+set "SRC=%1"
+set "TGT=%2"
+
+if exist %TGT%\ (
+    echo Extract Destination %TGT% exists
+) else (
+    powershell -command "Expand-Archive -Force '%SRC%' -DestinationPath '%TGT%'"
+)
+
+exit /b
+:: ENDE
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
@@ -79,8 +117,10 @@ set DENO_PATH=%PARENT%\Deno.%DENO_VERSION%
 if exist %DENO_PATH%\ (
     echo Deno %DENO_PATH% exists
 ) else (
-    curl -A "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64)" -L %DOWNLOAD% -o %DENO_ZIP%
-    powershell -command "Expand-Archive -Force '%PARENT%\%DENO_ZIP%' -DestinationPath '%DENO_PATH%'"
+    call :Download %DOWNLOAD% %DENO_ZIP%
+    call :Extract %PARENT%\%DENO_ZIP% %DENO_PATH%
+    :: curl -A "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64)" -L %DOWNLOAD% -o %DENO_ZIP%
+    :: powershell -command "Expand-Archive -Force '%PARENT%\%DENO_ZIP%' -DestinationPath '%DENO_PATH%'"
 )
 
 exit /b
@@ -98,8 +138,8 @@ set CODE_PATH=%PARENT%\Code
 if exist %CODE_PATH%\ (
     echo ZIP %CODE_PATH% exists
 ) else (
-    curl -A "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64)" -L %DOWNLOAD% -o %CODE_ZIP%
-    powershell -command "Expand-Archive -Force '%PARENT%\%CODE_ZIP%' -DestinationPath '%CODE_PATH%'"
+    call :Download %DOWNLOAD% %CODE_ZIP%
+    call :Extract %PARENT%\%CODE_ZIP% %CODE_PATH%
 )
 
 if exist %CODE_PATH%\data (
@@ -123,13 +163,8 @@ set GIT_ZIP=MinGit-%GIT_VERSION%-64-bit.zip
 
 set DOWNLOAD="https://github.com/git-for-windows/git/releases/download/v%GIT_VERSION%.windows.1/%GIT_ZIP%"
 set GIT_PATH=%PARENT%\Git.%GIT_VERSION%
-
-if exist %GIT_PATH% (
-    echo Git %GIT_PATH% exists
-) else (
-    curl -A "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64)" -L %DOWNLOAD% -o %GIT_ZIP%
-    powershell -command "Expand-Archive -Force '%PARENT%\%GIT_ZIP%' -DestinationPath '%GIT_PATH%'"
-)
+call :Download %DOWNLOAD% %GIT_ZIP%
+call :Extract %PARENT%\%GIT_ZIP% %GIT_PATH%
 exit /b
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -144,8 +179,8 @@ set PYTHON_PATH=%PARENT%\Python.%PY_VERSION%
 if exist %PYTHON_PATH% (
     echo ZIP %PYTHON_PATH% exists
 ) else (
-    curl -A "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64)" -L %DOWNLOAD% -o %PY_ZIP%
-    powershell -command "Expand-Archive -Force '%PARENT%\%PY_ZIP%' -DestinationPath '%PYTHON_PATH%'"
+    call :Download %DOWNLOAD% %PY_ZIP%
+    call :Extract %PARENT%\%PY_ZIP% %PYTHON_PATH%
 )
 
 set STDPATH=%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\
@@ -172,7 +207,7 @@ pip install virtualenv
 :: install modules
 :: https://jupyter.org/install
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-pip install notebook matplotlib pandas PyQt5
+pip install notebook jupyterlab matplotlib pandas PyQt5
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Create and fill Sources Dir
@@ -196,6 +231,7 @@ echo c = get_config^(^)  #noqa
 echo c.ServerApp.ip = '127.0.0.1'
 ) > %PARENT%\jupyter_notebook_config.py
 
+:: install deno as kernel in jupyter
 deno jupyter --install 
 
 (
