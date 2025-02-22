@@ -123,7 +123,7 @@ New-Item -Force -Path $TgtPath -Name "jupyter_notebook_config.py" -ItemType "fil
 if ((Test-Path $PYTHON_PATH\Scripts\virtualenv.exe)) {
     write-host -foregroundcolor Green "virtualenv.exe exists"
 } else {
-    pip install virtualenv notebook jupyterlab matplotlib pandas PyQt5
+    pip install virtualenv notebook jupyterlab matplotlib pandas PyQt6 pyqt6-tools
 }
 
 deno jupyter --install

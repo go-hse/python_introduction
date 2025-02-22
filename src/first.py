@@ -1,0 +1,4 @@
+print("\nHello World")
+
+for i in range(10):
+    print(f"{i:02d}")
