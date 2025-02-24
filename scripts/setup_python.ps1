@@ -86,6 +86,7 @@ if ((Test-Path $PYTHON_PATH\Scripts\pip.exe)) {
 ###############################################################################
 # Python Fix
 # to make pip work, see https://stackoverflow.com/questions/32639074/why-am-i-getting-importerror-no-module-named-pip-right-after-installing-pip
+# BUT https://bugs.python.org/issue34841
 $content=@"
 python$PY_SHORT.zip
 .
@@ -93,7 +94,7 @@ Lib\site-packages
 import site
 "@
 
-New-Item -Force -Path $PYTHON_PATH -Name "python$PY_SHORT._pth" -ItemType "file" -Value $content
+# New-Item -Force -Path $PYTHON_PATH -Name "python$PY_SHORT._pth" -ItemType "file" -Value $content
 
 ###############################################################################
 # Start Script
@@ -105,7 +106,8 @@ doskey ll=dir
 set "PATH=$env:Path"
 set "JUPYTER_CONFIG_DIR=$TgtPath"
 start jupyter lab $TgtPath\Sources\$REPO\notebooks\Python_2025\01_Basics
-start code "$TgtPath\Sources"
+cd /D "$TgtPath\Sources"
+start code .
 %comspec% /K "title Python-Kurs && color F0"
 "@
 New-Item -Force -Path $TgtPath -Name "start_python_environment.bat" -ItemType "file" -Value $content
