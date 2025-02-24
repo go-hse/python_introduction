@@ -124,25 +124,20 @@ New-Item -Force -Path $TgtPath -Name "jupyter_notebook_config.py" -ItemType "fil
 if ((Test-Path $PYTHON_PATH\Scripts\virtualenv.exe)) {
     write-host -foregroundcolor Green "virtualenv.exe exists"
 } else {
-    pip install virtualenv notebook jupyterlab matplotlib PyQt6 pyqt6-tools
+    pip install virtualenv notebook jupyterlab matplotlib pyside6 
+    # PyQt6 pyqt6-tools
 }
 
 # deno jupyter --install
 
 ###############################################################################
-# Sources
-$content=@"
-print("Hello World!")
-"@
+# Repo
 
-if ((Test-Path -Path "$TgtPath\Sources")) {
-    write-host -foregroundcolor Green "$TgtPath\Sources exists"
+if ((Test-Path -Path "$TgtPath\Repo")) {
+    write-host -foregroundcolor Green "$TgtPath\Repo exists"
 } else {
-    New-Item -Path $TgtPath -Name "Sources" -ItemType "directory"
-    New-Item -Force -Path $TgtPath\Sources -Name "hello.py" -ItemType "file" -Value $content
-    Set-Location -Path "$TgtPath\Sources"
-    git clone https://github.com/go-hse/$REPO.git
-    Set-Location -Path "$TgtPath"
+    New-Item -Path $TgtPath -Name "Repo" -ItemType "directory"
+    git clone https://github.com/go-hse/$REPO.git Repo
 }
 
 

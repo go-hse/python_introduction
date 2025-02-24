@@ -1,6 +1,7 @@
+import os
 import sys
 import json
-from PyQt6.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QPushButton, QFileDialog
+from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QPushButton, QFileDialog
 
 class JsonTableApp(QMainWindow):
     def __init__(self):
@@ -49,6 +50,8 @@ class JsonTableApp(QMainWindow):
                 self.table.setItem(row_idx, col_idx, QTableWidgetItem(str(row_data[key])))
         
 if __name__ == "__main__":
+    os.chdir(os.path.dirname(__file__))
+
     app = QApplication(sys.argv)
     window = JsonTableApp()
     window.show()

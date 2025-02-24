@@ -1,5 +1,5 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel
+from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel
 
 class CounterApp(QWidget):
     def __init__(self):

@@ -1,7 +1,7 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget
-from PyQt6.QtCore import Qt, QTimer, QRect
-from PyQt6.QtGui import QPainter, QColor
+from PySide6.QtWidgets import QApplication, QMainWindow, QWidget
+from PySide6.QtCore import Qt, QTimer, QRect
+from PySide6.QtGui import QPainter, QColor
 
 
 class PongGame(QWidget):
@@ -11,7 +11,7 @@ class PongGame(QWidget):
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)  # Setzt den Fokus auf das Widget
         
     def init_game(self):
-        self.setWindowTitle("Pong mit PyQt6")
+        self.setWindowTitle("Pong mit PySide6")
         self.setGeometry(100, 100, 800, 400)
         
         self.ball_x = 390

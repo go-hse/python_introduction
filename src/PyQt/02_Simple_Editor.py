@@ -1,6 +1,6 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow, QTextEdit, QFileDialog, QVBoxLayout, QWidget, QMenuBar
-from PyQt6.QtGui import QAction
+from PySide6.QtWidgets import QApplication, QMainWindow, QTextEdit, QFileDialog, QVBoxLayout, QWidget, QMenuBar
+from PySide6.QtGui import QAction
 
 
 class TextEditor(QMainWindow):

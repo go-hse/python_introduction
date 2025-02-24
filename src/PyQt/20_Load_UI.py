@@ -4,7 +4,7 @@ import sys
 # for embedded installation
 sys.path.append(os.path.join(os.path.dirname(__file__), 'uic'))
 
-from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow
+from PySide6.QtWidgets import QApplication, QWidget, QMainWindow
 
 # pyuic6 -o MainWidow.py MainWidow.ui
 from MainWindow import Ui_MainWindow
