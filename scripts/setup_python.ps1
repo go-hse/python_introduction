@@ -94,7 +94,7 @@ Lib\site-packages
 import site
 "@
 
-# New-Item -Force -Path $PYTHON_PATH -Name "python$PY_SHORT._pth" -ItemType "file" -Value $content
+New-Item -Force -Path $PYTHON_PATH -Name "python$PY_SHORT._pth" -ItemType "file" -Value $content
 
 ###############################################################################
 # Start Script
@@ -105,8 +105,8 @@ doskey ..=cd..
 doskey ll=dir
 set "PATH=$env:Path"
 set "JUPYTER_CONFIG_DIR=$TgtPath"
-start jupyter lab $TgtPath\Sources\$REPO\notebooks\Python_2025\01_Basics
-cd /D "$TgtPath\Sources"
+start jupyter lab $TgtPath\Repo\notebooks\Python_2025\
+cd /D "$TgtPath\Repo"
 start code .
 %comspec% /K "title Python-Kurs && color F0"
 "@
@@ -130,6 +130,7 @@ if ((Test-Path $PYTHON_PATH\Scripts\virtualenv.exe)) {
     # PyQt6 pyqt6-tools
 }
 
+Move-Item  -Path  "$PYTHON_PATH\python$PY_SHORT._pth"  -Destination  "$PYTHON_PATH\__python$PY_SHORT._pth"
 # deno jupyter --install
 
 ###############################################################################
