@@ -3,19 +3,18 @@
 # Copyright 2025: Andreas Roessler, Hochschule Esslingen
 # 08.01.2025: Port from Batch
 
-$TgtPath=$Args[0]
+param (
+    [string]$TgtPath
+)
 
-# if there is an argument/path that exists, take it as install-dir
-if ((Test-Path -Path $TgtPath)) {
-    $TgtPath=$Args[0]
-} else {
-    $TgtPath=$PSScriptRoot
+if (-not $TgtPath) {
+    $TgtPath = Get-Location
 }
 
 write-host "Install to $TgtPath"
 
-$GIT_VERSION="2.47.1"
-$PY_VERSION="3.13.1"
+$GIT_VERSION="2.48.1"
+$PY_VERSION="3.13.2"
 $PY_SHORT="313"
 
 $PY_VERSION="3.11.9"
@@ -57,7 +56,7 @@ function Download-Extract-Archive($Src, $Tgt, $TgtPath) {
     }
 }
 
-Download-Extract-Archive "https://dl.deno.land/release/$DENO_VERSION/deno-x86_64-pc-windows-msvc.zip" $TgtPath\$DENO_ZIP $DENO_PATH
+# Download-Extract-Archive "https://dl.deno.land/release/$DENO_VERSION/deno-x86_64-pc-windows-msvc.zip" $TgtPath\$DENO_ZIP $DENO_PATH
 Download-Extract-Archive "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-archive" $TgtPath\$CODE_ZIP $CODE_PATH
 Download-Extract-Archive "https://github.com/git-for-windows/git/releases/download/v$GIT_VERSION.windows.1/$GIT_ZIP" $TgtPath\$GIT_ZIP $GIT_PATH
 Download-Extract-Archive "https://www.python.org/ftp/python/$PY_VERSION/$PY_ZIP" "$TgtPath\$PY_ZIP" $PYTHON_PATH
@@ -100,14 +99,16 @@ New-Item -Force -Path $PYTHON_PATH -Name "python$PY_SHORT._pth" -ItemType "file"
 # Start Script
 $content=@"
 @echo off
+doskey ...=cd ..\..
+doskey ..=cd..
+doskey ll=dir
 set "PATH=$env:Path"
 set "JUPYTER_CONFIG_DIR=$TgtPath"
-:: start jupyter notebook $TgtPath\Sources\$REPO\notebooks\Python\00_Uebersicht.ipynb
-start jupyter lab $TgtPath\Sources\$REPO\notebooks\Python\00_Uebersicht.ipynb
+start jupyter lab $TgtPath\Sources\$REPO\notebooks\Python_2025\01_Basics
 start code "$TgtPath\Sources"
-start "Python-Umgebung in $TgtPath" %comspec% /K
+%comspec% /K "title Python-Kurs && color F0"
 "@
-New-Item -Force -Path $TgtPath -Name "start.bat" -ItemType "file" -Value $content
+New-Item -Force -Path $TgtPath -Name "start_python_environment.bat" -ItemType "file" -Value $content
 
 ###############################################################################
 # Jupyter Config
@@ -123,15 +124,15 @@ New-Item -Force -Path $TgtPath -Name "jupyter_notebook_config.py" -ItemType "fil
 if ((Test-Path $PYTHON_PATH\Scripts\virtualenv.exe)) {
     write-host -foregroundcolor Green "virtualenv.exe exists"
 } else {
-    pip install virtualenv notebook jupyterlab matplotlib pandas PyQt6 pyqt6-tools
+    pip install virtualenv notebook jupyterlab matplotlib PyQt6 pyqt6-tools
 }
 
-deno jupyter --install
+# deno jupyter --install
 
 ###############################################################################
 # Sources
 $content=@"
-print "Hello World!"
+print("Hello World!")
 "@
 
 if ((Test-Path -Path "$TgtPath\Sources")) {
