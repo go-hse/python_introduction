@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "python-introduction"
+version = "0.1.0"
+description = "Jupyter-Notebooks für die Python-Einführung 2025"
+readme = "README.md"
+authors = [
+  { name = "HS Esslingen", email = "andreas.roessler@hs-esslingen.de" }
+]
+license = { text = "MIT" }
+dependencies = [
+  "notebook",
+  "jupyterlab",
+  "ipykernel",
+]
+
+[tool.setuptools]
+# wir sagen setuptools, dass auch die Notebooks mitgenommen werden sollen
+include-package-data = true
+
+[tool.setuptools.package-data]
+"*" = ["*.ipynb"]
