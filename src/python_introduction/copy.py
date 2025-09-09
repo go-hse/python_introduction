@@ -5,7 +5,7 @@ import os
 
 
 def main():
-    target_dir = pathlib.Path(os.getcwd()) / "notebooks_python_introduction"
+    target_dir = pathlib.Path(os.getcwd()) / "python_introduction"
     target_dir.mkdir(parents=True, exist_ok=True)
 
     with resources.path("python_introduction", "notebooks") as nb_dir:
