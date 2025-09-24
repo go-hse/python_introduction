@@ -3,7 +3,6 @@ import shutil
 import pathlib
 import os
 
-
 def main():
     target_dir = pathlib.Path(os.getcwd()) / "python_introduction"
     target_dir.mkdir(parents=True, exist_ok=True)
