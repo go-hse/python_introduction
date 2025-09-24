@@ -65,7 +65,8 @@ Download-Extract-Archive "https://www.python.org/ftp/python/$PY_VERSION/$PY_ZIP"
 # Set Path Variable
 
 $STDPATH="$env:SystemRoot\system32;$env:SystemRoot;$env:SystemRoot\System32\Wbem;$env:SystemRoot\System32\WindowsPowerShell\v1.0\"
-$env:Path="$STDPATH;$PYTHON_PATH;$PYTHON_PATH\Scripts;$CODE_PATH;$GIT_PATH\cmd;$DENO_PATH"
+# $env:Path="$STDPATH;$PYTHON_PATH;$PYTHON_PATH\Scripts;$CODE_PATH;$GIT_PATH\cmd;$DENO_PATH"
+$env:Path="$STDPATH;$PYTHON_PATH;$PYTHON_PATH\Scripts;$CODE_PATH;$GIT_PATH\cmd
 
 $env:PYTHONHOME="$PYTHON_PATH"
 $env:PYTHONPATH=
