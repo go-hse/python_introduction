@@ -9,7 +9,7 @@ def main():
     target_dir.mkdir(parents=True, exist_ok=True)
 
     with resources.path("python_introduction", "notebooks") as nb_dir:
-        for item in nb_dir.rglob("*.ipynb"):
+        for item in nb_dir.rglob("*"):
             rel_path = item.relative_to(nb_dir)
             dest = target_dir / rel_path
             dest.parent.mkdir(parents=True, exist_ok=True)
