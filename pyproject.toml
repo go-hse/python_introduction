@@ -23,7 +23,7 @@ packages = ["python_introduction"]
 include-package-data = true
 
 [tool.setuptools.package-data]
-"python_introduction" = ["notebooks/**/*.ipynb"]
+"python_introduction" = ["notebooks/**/*"]
 
 [project.scripts]
 python-intro-copy = "python_introduction.copy:main"
