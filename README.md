@@ -18,8 +18,8 @@ python-intro-copy
 
 pip list
 
-pip install python-introduction-notebooks --upgrade
-
+:: pip install python-introduction-notebooks --upgrade
+pip install https://github.com/go-hse/python_introduction/archive/refs/heads/main.zip --upgrade
 
 ```
 
